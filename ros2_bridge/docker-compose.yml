@@ -1,0 +1,40 @@
+services:
+  ros_bridge:
+    user: ${ROS_USER}
+    env_file:
+      - .env
+    network_mode: host
+    build:
+      context: .
+      network: host
+      dockerfile: ./docker/Dockerfile_bridge
+      args:
+        UBUNTU_DISTRO: focal
+        ROS2_DISTRO: humble
+        USER: ${ROS_USER}
+    stdin_open: true
+    tty: true
+  ros2_moveit2:
+    user: ${ROS_USER}
+    env_file:
+      - .env
+    network_mode: host
+    build:
+      context: .
+      network: host
+      dockerfile: ./docker/Dockerfile_moveit2
+      args:
+        ROS_DISTRO: humble
+        USER: ${ROS_USER}
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    volumes:
+      - ./src/ws_moveit2:/home/${ROS_USER}/ws_moveit2
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true

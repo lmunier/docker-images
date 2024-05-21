@@ -1,5 +1,5 @@
 services:
-  ros_bridge:
+  ros2:
     user: ${ROS_USER}
     env_file:
       - .env
@@ -7,22 +7,7 @@ services:
     build:
       context: ./docker
       network: host
-      dockerfile: Dockerfile_bridge
-      args:
-        UBUNTU_DISTRO: focal
-        ROS2_DISTRO: humble
-        USER: ${ROS_USER}
-    stdin_open: true
-    tty: true
-  ros2_moveit2:
-    user: ${ROS_USER}
-    env_file:
-      - .env
-    network_mode: host
-    build:
-      context: ./docker
-      network: host
-      dockerfile: Dockerfile_moveit2
+      dockerfile: Dockerfile
       args:
         ROS_DISTRO: humble
         USER: ${ROS_USER}
@@ -34,7 +19,7 @@ services:
               count: 1
               capabilities: [ gpu ]
     volumes:
-      - ./src/ws_moveit2:/home/${ROS_USER}/ws_moveit2
+      - ./src:/home/${ROS_USER}/ros2_ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix
     stdin_open: true
     tty: true

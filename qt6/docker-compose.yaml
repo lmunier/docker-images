@@ -5,9 +5,9 @@ services:
       - .env
     network_mode: host
     build:
-      context: .
+      context: ./docker
       network: host
-      dockerfile: ./docker/Dockerfile
+      dockerfile: Dockerfile
       args:
         USER: ${USER}
     deploy:

@@ -25,7 +25,7 @@ ENV LANG en_US.UTF-8
 ARG UID=1000
 ARG GID=1000
 RUN addgroup --gid ${GID} ${USER}
-RUN adduser --uid ${UID} --gid ${GID} ${USER} && yes | passwd ${USER}
+RUN useradd -m ${USER} && echo "${USER}:${USER}passwd" | chpasswd && adduser ${USER} sudo
 RUN usermod -a -G dialout ${USER}
 
 WORKDIR ${HOME}
@@ -97,8 +97,8 @@ WORKDIR ${HOME}/bridge_ws
 RUN colcon build --symlink-install --packages-skip ros1_bridge
 
 RUN /bin/bash -c "source ${ROS1_INSTALL_PATH}/setup.bash && \
-                  source ${ROS2_INSTALL_PATH}/setup.bash && \
-                  colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure"
+  source ${ROS2_INSTALL_PATH}/setup.bash && \
+  colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure"
 
 WORKDIR ${HOME}
 

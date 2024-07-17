@@ -1,8 +1,7 @@
 services:
   ros_bridge:
     user: ${ROS_USER}
-    env_file:
-      - .env
+    env_file: .env
     network_mode: host
     build:
       context: .
@@ -16,8 +15,7 @@ services:
     tty: true
   ros2_moveit2:
     user: ${ROS_USER}
-    env_file:
-      - .env
+    env_file: .env
     network_mode: host
     build:
       context: .
@@ -30,9 +28,10 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: 1
-            capabilities: [gpu]
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    privileged: true
     volumes:
       - ./src/ws_moveit2:/home/${ROS_USER}/ws_moveit2
       - /tmp/.X11-unix:/tmp/.X11-unix

@@ -1,0 +1,23 @@
+services:
+  qt6:
+    user: ${USER}
+    env_file:
+      - .env
+    network_mode: host
+    build:
+      context: .
+      network: host
+      dockerfile: ./docker/Dockerfile
+      args:
+        USER: ${USER}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true

@@ -11,12 +11,14 @@ ARG HOME=/home/${USER}
 ENV DEBIAN_FRONTEND noninteractive
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES video,compute,utility
+ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+
+# Tell docker we want to use bash instead of sh in general
+SHELL ["/bin/bash", "-c"]
 
 # create and configure a new user
-ARG UID=1000
-ARG GID=1000
-RUN addgroup --gid ${GID} ${USER}
-RUN adduser --uid ${UID} --gid ${GID} ${USER} && yes | passwd ${USER}
+RUN apt update --fix-missing && apt upgrade -y && apt clean
+RUN useradd -m ${USER} && echo "${USER}:${USER}passwd" | chpasswd && adduser ${USER} sudo
 RUN usermod -a -G dialout ${USER}
 
 WORKDIR ${HOME}
@@ -27,7 +29,14 @@ RUN apt update --fix-missing && apt upgrade -y && apt clean
 RUN apt install -y \
     git \
     python3 \
-    ros-${ROS_DISTRO}-moveit
+    ros-${ROS_DISTRO}-moveit \
+    python3-pip
+
+RUN pip3 install --upgrade pip
+RUN pip3 install \
+    pandas \
+    anytree \
+    tabulate
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 

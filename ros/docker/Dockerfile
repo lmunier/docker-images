@@ -16,7 +16,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES video,compute,utility
 ARG UID=1000
 ARG GID=1000
 RUN addgroup --gid ${GID} ${USER}
-RUN adduser --uid ${UID} --gid ${GID} ${USER} && yes | passwd ${USER}
+RUN useradd -m ${USER} && echo "${USER}:${USER}passwd" | chpasswd && adduser ${USER} sudo
 RUN usermod -a -G dialout ${USER}
 
 WORKDIR ${HOME}

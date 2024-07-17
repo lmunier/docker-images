@@ -4,9 +4,9 @@ services:
     env_file: .env
     network_mode: host
     build:
-      context: .
+      context: ./docker
       network: host
-      dockerfile: ./docker/Dockerfile_bridge
+      dockerfile: Dockerfile_bridge
       args:
         UBUNTU_DISTRO: focal
         ROS2_DISTRO: humble
@@ -18,9 +18,9 @@ services:
     env_file: .env
     network_mode: host
     build:
-      context: .
+      context: ./docker
       network: host
-      dockerfile: ./docker/Dockerfile_moveit2
+      dockerfile: Dockerfile_moveit2
       args:
         ROS_DISTRO: humble
         USER: ${ROS_USER}

@@ -39,7 +39,15 @@ RUN apt update --fix-missing && apt upgrade -y && apt clean
 RUN apt install -y \
     git \
     python3 \
-    ros-${ROS_DISTRO}-moveit
+    ros-${ROS_DISTRO}-moveit \
+    python3-pip
+
+# Install urdf_to_dh parameters dependencies
+RUN pip3 install --upgrade pip
+RUN pip3 install \
+    pandas \
+    anytree \
+    tabulate
 
 WORKDIR ${HOME}/ros2_ws/src
 RUN chown -R ${USER}:${USER} ${HOME}

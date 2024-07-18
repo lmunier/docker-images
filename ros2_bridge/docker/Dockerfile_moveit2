@@ -32,6 +32,7 @@ RUN apt install -y \
     ros-${ROS_DISTRO}-moveit \
     python3-pip
 
+# Install urdf_to_dh parameters dependencies
 RUN pip3 install --upgrade pip
 RUN pip3 install \
     pandas \
